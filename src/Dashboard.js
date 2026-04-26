@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const SUPABASE_URL = "https://jwdecztufhdmzpozxeoe.supabase.co";
-const SUPABASE_KEY = "sb_publishable_QsxezHz7a8y8z3ra2FkV6A__d_Xwg6l";
+const SUPABASE_URL = "https://haogrokgfhiqmpasrddz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Xia8HVo0CcI3UlBGA0rQbA_Hnsa3TKK";
 
 const DASHBOARD_PASSWORD = "dentist123";
 
