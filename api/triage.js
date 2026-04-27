@@ -6,20 +6,30 @@ module.exports = async function handler(req, res) {
 
   const { symptom, services } = req.body;
 
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 200,
-      messages: [{ role: "user", content: `Dental patient says: "${symptom}". Recommend ONE of: ${services}. Reply in 1-2 friendly sentences.` }]
-    })
-  });
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 200,
+        messages: [{ role: "user", content: `Dental patient says: "${symptom}". Recommend ONE of: ${services}. Reply in 1-2 friendly sentences.` }]
+      })
+    });
 
-  const data = await response.json();
-  res.status(200).json({ result: data.content[0].text });
+    const data = await response.json();
+    console.log("Anthropic response:", JSON.stringify(data));
+    
+    if (data.content && data.content[0]) {
+      res.status(200).json({ result: data.content[0].text });
+    } else {
+      res.status(200).json({ result: "Error: " + JSON.stringify(data) });
+    }
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
 }
