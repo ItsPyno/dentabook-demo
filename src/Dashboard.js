@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const SUPABASE_URL = "https://haogrokgfhiqmpasrddz.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Xia8HVo0CcI3UlBGA0rQbA_Hnsa3TKK";
 
-const DASHBOARD_PASSWORD = "dentist123";
+const DASHBOARD_PASSWORD = "demo123";
 
 function createDB(url, key) {
   const base = url.replace(/\/+$/, "");
@@ -100,7 +100,7 @@ function LoginScreen({ onLogin }) {
         <button onClick={handleLogin} style={{ width: "100%", background: "linear-gradient(135deg,#0ea5e9,#14b8a6)", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
           Sign In →
         </button>
-        <p style={{ fontSize: 11, color: "#cbd5e1", marginTop: 16 }}>Default password: dentist123</p>
+        <p style={{ fontSize: 11, color: "#cbd5e1", marginTop: 16 }}>Default password: demo123</p>
       </div>
     </div>
   );
