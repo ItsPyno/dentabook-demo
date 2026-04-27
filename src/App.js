@@ -126,16 +126,16 @@ export default function App() {
     if (!symptomInput.trim()) return;
     setAiLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514", max_tokens: 200,
-          messages: [{ role: "user", content: `Dental patient says: "${symptomInput}". Recommend ONE of: ${services.map(s => s.label).join(", ")}. Reply in 1-2 friendly sentences.` }]
-        })
-      });
-      const d = await res.json();
-      setAiSuggestion(d.content[0].text);
+const res = await fetch("/api/triage", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    symptom: symptomInput,
+    services: services.map(s => s.label).join(", ")
+  })
+});
+const data = await res.json();
+setAiSuggestion(data.result);
     } catch { setAiSuggestion("We recommend booking a General Checkup so our team can assess your needs."); }
     setAiLoading(false);
   }
