@@ -22,13 +22,7 @@ module.exports = async function handler(req, res) {
     });
 
     const data = await response.json();
-    console.log("Anthropic response:", JSON.stringify(data));
-    
-    if (data.content && data.content[0]) {
-      res.status(200).json({ result: data.content[0].text });
-    } else {
-      res.status(200).json({ result: "Error: " + JSON.stringify(data) });
-    }
+    res.status(200).json({ result: data.content[0].text });
   } catch(e) {
     res.status(500).json({ error: e.message });
   }
