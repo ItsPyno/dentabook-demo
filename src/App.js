@@ -126,16 +126,16 @@ export default function App() {
     if (!symptomInput.trim()) return;
     setAiLoading(true);
     try {
-const res = await fetch("/api/triage", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    symptom: symptomInput,
-    services: services.map(s => s.label).join(", ")
-  })
-});
-const data = await res.json();
-setAiSuggestion(data.result);
+      const res = await fetch("/api/triage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          symptom: symptomInput,
+          services: services.map(s => s.label).join(", ")
+        })
+      });
+      const data = await res.json();
+      setAiSuggestion(data.result);
     } catch { setAiSuggestion("We recommend booking a General Checkup so our team can assess your needs."); }
     setAiLoading(false);
   }
@@ -151,6 +151,18 @@ setAiSuggestion(data.result);
         patient_phone: form.phone, notes: form.notes || null, status: "confirmed",
       });
       setBooked(true);
+      fetch('/api/send-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientName: form.name,
+          patientEmail: form.email,
+          service: services.find(s => s.id === selected.service)?.label,
+          dentist: dentists.find(d => d.id === selected.dentist)?.name || 'First Available',
+          date: selected.date?.toLocaleDateString('en-IE', { weekday: 'long', month: 'long', day: 'numeric' }),
+          time: selected.time,
+        })
+      });
     } catch(e) {
       setBookingError((e.message||"").includes("unique")
         ? "That slot was just taken. Please go back and choose another time."
