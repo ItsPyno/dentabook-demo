@@ -120,7 +120,21 @@ export default function App() {
     })();
   }, [selected.date, selected.dentist]);
 
-  const slots = ALL_SLOTS.map(t => ({ time: t, available: !takenSlots.includes(t) }));
+  const now = new Date();
+const slots = ALL_SLOTS.map(t => {
+  const isToday = selected.date && toDateStr(selected.date) === toDateStr(today);
+  let isPast = false;
+  if (isToday) {
+    const [timePart, meridiem] = t.split(' ');
+    let [hours, minutes] = timePart.split(':').map(Number);
+    if (meridiem === 'PM' && hours !== 12) hours += 12;
+    if (meridiem === 'AM' && hours === 12) hours = 0;
+    const slotTime = new Date();
+    slotTime.setHours(hours, minutes, 0, 0);
+    isPast = slotTime <= now;
+  }
+  return { time: t, available: !takenSlots.includes(t) && !isPast };
+});
 
   async function handleAiTriage() {
     if (!symptomInput.trim()) return;
